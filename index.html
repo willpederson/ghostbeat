@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ghost Beat — Timing Trainer for Drummers</title>
-    <meta name="description" content="Ghost Beat is a macOS metronome app built for serious drummers. Practice internal timing by muting random beats, setting accent patterns, and training with progressive difficulty.">
-    <meta name="keywords" content="metronome app, drummer metronome, timing trainer, macOS metronome, drum practice, internal timing, ghost beat, click track, drum trainer">
+    <title>Ghost Beat — Internal Timing Trainer</title>
+    <meta name="description" content="Ghost Beat is the metronome that trains your internal clock. Ghost bars cycle between audible and silent, forcing you to keep time on your own. iOS & macOS.">
+    <meta name="keywords" content="metronome app, timing trainer, ghost beat, drum practice, internal timing, iOS metronome, ghost bars, rhythm training, tap accuracy, practice tracker">
     <meta name="author" content="Will Pederson">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://willpederson.github.io/ghostbeat/">
 
-    <meta property="og:title" content="Ghost Beat — Timing Trainer for Drummers">
-    <meta property="og:description" content="Train your internal timing. Ghost Beat mutes random beats so you can practice staying locked in without the click.">
+    <meta property="og:title" content="Ghost Beat — Internal Timing Trainer">
+    <meta property="og:description" content="The metronome that disappears. Ghost bars force you to keep time without the click.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://willpederson.github.io/ghostbeat/">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Ghost Beat — Timing Trainer for Drummers">
-    <meta name="twitter:description" content="Train your internal timing. Ghost Beat mutes random beats so you can practice staying locked in without the click.">
+    <meta name="twitter:title" content="Ghost Beat — Internal Timing Trainer">
+    <meta name="twitter:description" content="The metronome that disappears. Ghost bars force you to keep time without the click.">
 
     <script type="application/ld+json">
     {
@@ -25,8 +25,8 @@
         "@type": "SoftwareApplication",
         "name": "Ghost Beat",
         "applicationCategory": "MusicApplication",
-        "operatingSystem": "macOS",
-        "description": "Ghost Beat is a macOS metronome built for drummers who want to develop real internal timing. Mute random beats, set accent patterns, build practice routines, and use progressive difficulty to train without relying on the click.",
+        "operatingSystem": "iOS, macOS",
+        "description": "Ghost Beat is a timing trainer that cycles between audible and silent bars, training your internal clock. Features ghost bars, tap accuracy grading, practice routines, daily challenges, and detailed stats.",
         "offers": {
             "@type": "Offer",
             "price": "0",
@@ -36,36 +36,42 @@
             "@type": "Person",
             "name": "Will Pederson"
         },
-        "softwareVersion": "1.0.0",
-        "datePublished": "2026-03",
-        "featureList": [
-            "Random beat muting to train internal timing",
-            "Per-beat accent control",
-            "Progressive difficulty — beats fade out over time",
-            "Practice routine builder",
-            "Tap accuracy tracking with stats",
-            "Adjustable time signatures",
-            "BPM range 20–300",
-            "Background audio",
-            "macOS native app"
-        ]
+        "softwareVersion": "2.0",
+        "datePublished": "2026-03"
     }
     </script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        :root {
+            --bg: #121212;
+            --surface: #1a1a1a;
+            --well: #0d0d0d;
+            --gold: #ffd700;
+            --gold-glow: rgba(255, 215, 0, 0.15);
+            --neon: #a2ff00;
+            --neon-glow: rgba(162, 255, 0, 0.15);
+            --cyan: #00e5ff;
+            --red: #e64040;
+            --text: #ffffff;
+            --text-dim: #b3b3b3;
+            --text-muted: #808080;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Rounded', 'Segoe UI', Roboto, sans-serif;
             background:
-                radial-gradient(circle at 20% 20%, rgba(80, 80, 80, 0.12) 0%, transparent 35%),
-                radial-gradient(circle at 80% 15%, rgba(180, 180, 180, 0.06) 0%, transparent 30%),
-                linear-gradient(145deg, #050505 0%, #0a0a0a 45%, #111111 100%);
-            color: #fff;
+                radial-gradient(circle at 25% 15%, rgba(255, 215, 0, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 75% 85%, rgba(162, 255, 0, 0.03) 0%, transparent 40%),
+                linear-gradient(145deg, #0a0a0a 0%, #121212 50%, #0d0d0d 100%);
+            color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
+        /* Hero */
         .hero {
             display: flex;
             flex-direction: column;
@@ -80,22 +86,22 @@
         .hero::before {
             content: '';
             position: absolute;
-            width: 420px;
-            height: 420px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 35%, transparent 72%);
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
             border-radius: 50%;
-            top: 18%;
+            top: 15%;
             left: 50%;
             transform: translateX(-50%);
             pointer-events: none;
-            filter: blur(8px);
+            filter: blur(40px);
         }
 
         .app-icon {
             width: 140px;
             height: 140px;
             border-radius: 31px;
-            box-shadow: 0 20px 60px rgba(255, 255, 255, 0.1), 0 0 80px rgba(255, 255, 255, 0.04);
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.15), 0 0 80px rgba(255, 215, 0, 0.05);
             margin-bottom: 32px;
             position: relative;
             z-index: 1;
@@ -106,7 +112,7 @@
             font-weight: 800;
             letter-spacing: -1.5px;
             margin-bottom: 12px;
-            background: linear-gradient(135deg, #fff 0%, #aaaaaa 100%);
+            background: linear-gradient(135deg, #ffffff 0%, var(--gold) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -114,19 +120,14 @@
 
         .subtitle {
             font-size: 20px;
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--text-dim);
             font-weight: 500;
             margin-bottom: 40px;
             max-width: 520px;
             line-height: 1.5;
         }
 
-        .cta-buttons {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+        .cta-buttons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 
         .btn {
             display: inline-flex;
@@ -141,172 +142,118 @@
         }
 
         .btn-primary {
-            background: #ffffff;
+            background: var(--gold);
             color: #000;
         }
-
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text);
+            border: 1px solid var(--border);
         }
-
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
         }
 
         .btn svg { width: 22px; height: 22px; }
 
+        .platform-note {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
         .scroll-hint {
             position: absolute;
             bottom: 40px;
-            color: rgba(255, 255, 255, 0.3);
+            color: var(--text-muted);
             font-size: 13px;
             animation: bounce 2s infinite;
         }
-
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(8px); }
         }
 
-        .features {
-            padding: 80px 24px 100px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .features h2 {
-            text-align: center;
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
+        /* Sections */
+        .features { padding: 80px 24px 100px; max-width: 1100px; margin: 0 auto; }
+        .features h2 { text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 16px; }
         .features .section-sub {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.45);
-            font-size: 17px;
-            margin-bottom: 60px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            text-align: center; color: var(--text-dim); font-size: 17px;
+            margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto;
         }
 
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
             border-radius: 20px;
             padding: 32px;
             transition: all 0.2s ease;
         }
-
         .feature-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 215, 0, 0.2);
             transform: translateY(-4px);
         }
 
         .feature-icon { font-size: 32px; margin-bottom: 16px; }
-        .feature-card h3 { font-size: 19px; font-weight: 700; margin-bottom: 8px; }
-        .feature-card p { color: rgba(255, 255, 255, 0.5); font-size: 15px; line-height: 1.6; }
+        .feature-card h3 { font-size: 19px; font-weight: 700; margin-bottom: 8px; color: var(--gold); }
+        .feature-card p { color: var(--text-dim); font-size: 15px; line-height: 1.6; }
 
-        .how-it-works {
-            padding: 80px 24px 100px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .how-it-works h2 {
-            text-align: center;
-            font-size: 36px;
+        .pro-badge {
+            display: inline-block;
+            font-size: 10px;
             font-weight: 700;
-            margin-bottom: 50px;
+            background: var(--gold);
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
         }
 
-        .step {
-            display: flex;
-            gap: 24px;
-            margin-bottom: 40px;
-            align-items: flex-start;
-        }
+        /* How it works */
+        .how-it-works { padding: 80px 24px 100px; max-width: 800px; margin: 0 auto; }
+        .how-it-works h2 { text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 50px; }
 
+        .step { display: flex; gap: 24px; margin-bottom: 40px; align-items: flex-start; }
         .step-num {
-            flex-shrink: 0;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 18px;
-            color: #ffffff;
+            flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+            background: var(--gold-glow); border: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 18px; color: var(--gold);
         }
-
         .step-content h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-        .step-content p { color: rgba(255, 255, 255, 0.45); font-size: 15px; line-height: 1.6; }
+        .step-content p { color: var(--text-dim); font-size: 15px; line-height: 1.6; }
 
-        .specs {
-            padding: 60px 24px 100px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .specs h2 {
-            text-align: center;
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 40px;
-        }
-
-        .spec-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
+        /* Specs */
+        .specs { padding: 60px 24px 100px; max-width: 700px; margin: 0 auto; }
+        .specs h2 { text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 40px; }
+        .spec-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         .spec-item {
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 14px;
-            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 14px; padding: 20px;
         }
-
-        .spec-item .label {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.35);
-            margin-bottom: 6px;
-        }
-
+        .spec-item .label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; }
         .spec-item .value { font-size: 16px; font-weight: 600; }
+        .spec-item .value .neon { color: var(--neon); }
 
+        /* Footer */
         footer {
-            text-align: center;
-            padding: 40px 24px 60px;
-            color: rgba(255, 255, 255, 0.25);
-            font-size: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; padding: 40px 24px 60px;
+            color: var(--text-muted); font-size: 14px;
+            border-top: 1px solid var(--border);
         }
-
-        footer a { color: rgba(255, 255, 255, 0.4); text-decoration: none; }
-        footer a:hover { color: #ffffff; }
+        footer a { color: var(--text-dim); text-decoration: none; }
+        footer a:hover { color: var(--gold); }
 
         @media (max-width: 640px) {
             h1 { font-size: 36px; }
@@ -322,61 +269,61 @@
     <section class="hero">
         <img src="icon.png" alt="Ghost Beat App Icon" class="app-icon">
         <h1>Ghost Beat</h1>
-        <p class="subtitle">The metronome that trains your internal clock. Mute beats, set accents, and build the timing that never falls apart.</p>
+        <p class="subtitle">The metronome that disappears. Ghost bars cycle between audible and silent — your job is to keep the tempo when the click is gone.</p>
         <div class="cta-buttons">
             <a href="https://apps.apple.com/app/ghost-beat-timing-trainer/id6743352015" class="btn btn-primary">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                Download on the Mac App Store
+                Download on the App Store
             </a>
         </div>
-        <p style="margin-top: 12px; font-size: 13px; color: rgba(255,255,255,0.3);">Available for macOS</p>
+        <p class="platform-note">Free with optional Pro upgrade · iOS & macOS</p>
         <div class="scroll-hint">↓ Learn more</div>
     </section>
 
     <section class="features" id="features">
-        <h2>Built for Serious Practice</h2>
-        <p class="section-sub">Ghost Beat isn't just a metronome — it's a timing trainer. Every feature is designed to help you develop rock-solid internal pulse.</p>
+        <h2>Survival Training for Your Internal Clock</h2>
+        <p class="section-sub">Every feature is designed around one goal: making you keep time without relying on the click.</p>
 
         <div class="feature-grid">
             <div class="feature-card">
                 <div class="feature-icon">👻</div>
-                <h3>Random Mute</h3>
-                <p>Ghost Beat randomly silences beats so you have to keep time internally. When the click disappears, your real timing is revealed.</p>
+                <h3>Ghost Bars</h3>
+                <p>Set how many bars play and how many go silent. 2 on, 2 off. 1 on, 3 off. When the click vanishes, your real timing shows up.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🥁</div>
-                <h3>Beat Grid</h3>
-                <p>Visual grid of every beat in the bar. Toggle individual beats on or off, set accents, and customize your click pattern completely.</p>
+                <div class="feature-icon">🎲</div>
+                <h3>Random Mute</h3>
+                <p>Individual beats disappear unpredictably. You never know which one is next. Pure internal time training.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🎯</div>
-                <h3>Accent Control</h3>
-                <p>Tap any beat in the grid to accent it. Beat 1 is accented by default. Build any accent pattern you want — triplets, clave, anything.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📉</div>
-                <h3>Progressive Difficulty</h3>
-                <p>Beats gradually fade out over time, forcing you to internalize the pulse before they disappear completely. The ultimate timing test.</p>
+                <h3>Tap Accuracy</h3>
+                <p>Tap along with the beat and get graded S through D. Calibrates to your touch latency, then measures real timing deviation.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">📋</div>
                 <h3>Practice Routines</h3>
-                <p>Chain presets into timed practice sessions. Set a BPM progression, work through your routine, and track how far you've come.</p>
+                <p>Chain exercises into timed sessions. Set BPM, on/off bars, and time signature per step. Hit play and the routine runs itself.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Daily Challenges</h3>
+                <p>A new timing challenge every day — survive ghost bars, hit accuracy targets, or hold tempo for a set time. Stay sharp.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
-                <h3>Tap Accuracy</h3>
-                <p>Tap along and see exactly how close you are to the beat. Stats panel shows your average deviation and consistency over time.</p>
+                <h3>Practice Stats</h3>
+                <p>Streaks, session history, timing grades, and weekly charts. See your progress measured in timing-specific terms, not just minutes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📉</div>
+                <h3>Progressive Difficulty <span class="pro-badge">PRO</span></h3>
+                <p>Beats gradually fade out over bars until you're playing in complete silence. The ultimate test of internal pulse.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🎛️</div>
-                <h3>Jog Wheel BPM</h3>
-                <p>Scroll the jog wheel to nudge BPM up or down in real time — no typing required. Fast, tactile, like a real piece of hardware.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔊</div>
-                <h3>Background Audio</h3>
-                <p>Ghost Beat keeps playing while you use other apps. Switch to your DAW, sheet music, or YouTube — the click keeps running.</p>
+                <h3>Deep Customization</h3>
+                <p>6 time signatures, 7 subdivisions (down to 1/32T), 4 click sounds, accent patterns, pitch control, count-ins, and haptic feedback.</p>
             </div>
         </div>
     </section>
@@ -386,29 +333,29 @@
         <div class="step">
             <div class="step-num">1</div>
             <div class="step-content">
-                <h3>Set your tempo</h3>
-                <p>Dial in BPM with the jog wheel or type it directly. Set your time signature and subdivisions for the feel you want.</p>
+                <h3>Set your tempo and ghost bars</h3>
+                <p>Dial in BPM with the jog wheel. Set ON bars (click plays) and OFF bars (silence). Start simple: 3 on, 1 off.</p>
             </div>
         </div>
         <div class="step">
             <div class="step-num">2</div>
             <div class="step-content">
-                <h3>Customize the grid</h3>
-                <p>Turn beats on or off. Tap to accent. Enable random mute to introduce silence, or turn on progressive difficulty to fade the click out.</p>
+                <h3>Play through the silence</h3>
+                <p>When the click drops out, keep going. Stay exactly where the beat would be. When it comes back, see if you drifted.</p>
             </div>
         </div>
         <div class="step">
             <div class="step-num">3</div>
             <div class="step-content">
-                <h3>Practice and listen</h3>
-                <p>Play along. When beats drop out, keep going. Your job is to stay exactly where the click would be — even when it's not there.</p>
+                <h3>Measure your timing</h3>
+                <p>Turn on Tap Accuracy and tap along. Get graded on every tap — see your deviation in milliseconds and watch your grade climb.</p>
             </div>
         </div>
         <div class="step">
             <div class="step-num">4</div>
             <div class="step-content">
-                <h3>Track your accuracy</h3>
-                <p>Use the tap accuracy panel to see how locked in you really are. Numbers don't lie — and improvement shows up fast.</p>
+                <h3>Push harder</h3>
+                <p>Increase off bars, enable random mute, try daily challenges. Build the kind of timing that doesn't need a safety net.</p>
             </div>
         </div>
     </section>
@@ -425,27 +372,27 @@
                 <div class="value">2/4, 3/4, 4/4, 5/4, 6/8, 7/8</div>
             </div>
             <div class="spec-item">
-                <div class="label">Beat Grid Max</div>
-                <div class="value">16 beats</div>
+                <div class="label">Subdivisions</div>
+                <div class="value">1/4 through 1/32T</div>
             </div>
             <div class="spec-item">
                 <div class="label">Platform</div>
-                <div class="value">macOS</div>
+                <div class="value">iOS & macOS</div>
             </div>
             <div class="spec-item">
                 <div class="label">Price</div>
-                <div class="value">Free</div>
+                <div class="value">Free · <span class="neon">Pro $2.99</span></div>
             </div>
             <div class="spec-item">
                 <div class="label">Version</div>
-                <div class="value">1.0.0</div>
+                <div class="value">2.0</div>
             </div>
             <div class="spec-item">
                 <div class="label">Background Audio</div>
                 <div class="value">Yes</div>
             </div>
             <div class="spec-item">
-                <div class="label">Storage</div>
+                <div class="label">Data</div>
                 <div class="value">100% on-device</div>
             </div>
         </div>
