@@ -14,10 +14,14 @@
     <meta property="og:description" content="The metronome that disappears. Ghost bars force you to keep time without the click.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://willpederson.github.io/ghostbeat/">
+    <meta property="og:image" content="https://willpederson.github.io/ghostbeat/icon.png">
+    <meta property="og:image:alt" content="Ghost Beat app icon">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Ghost Beat — Internal Timing Trainer">
     <meta name="twitter:description" content="The metronome that disappears. Ghost bars force you to keep time without the click.">
+    <meta name="twitter:image" content="https://willpederson.github.io/ghostbeat/icon.png">
+    <meta name="theme-color" content="#121212">
 
     <script type="application/ld+json">
     {
@@ -70,6 +74,15 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
+
+        .skip-link {
+            position: fixed; top: 12px; left: 12px; z-index: 100;
+            padding: 10px 14px; border-radius: 10px;
+            background: var(--gold); color: #000; font-weight: 700;
+            transform: translateY(-160%); transition: transform 0.2s ease;
+        }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
 
         /* Hero */
         .hero {
@@ -262,10 +275,21 @@
             .features h2, .how-it-works h2, .specs h2 { font-size: 28px; }
             .spec-list { grid-template-columns: 1fr; }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
 
+    <main id="main-content">
     <section class="hero">
         <img src="icon.png" alt="Ghost Beat App Icon" class="app-icon">
         <h1>Ghost Beat</h1>
@@ -397,6 +421,7 @@
             </div>
         </div>
     </section>
+    </main>
 
     <footer>
         <p>Ghost Beat © 2026 Will Pederson</p>
