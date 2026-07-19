@@ -4,31 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy — Ghost Beat</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta name="theme-color" content="#0a0a0a">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --gold: #ffd700;
+            --text: #f4f4f4;
+            --dim: #9b9b9b;
+            --muted: #6b6b6b;
+            --line: rgba(255, 255, 255, 0.08);
+            --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-            background: #121212;
-            color: #ffffff;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-            padding: 60px 24px;
+            -webkit-font-smoothing: antialiased;
         }
-        .container { max-width: 680px; margin: 0 auto; }
-        h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; color: #ffd700; }
-        .updated { font-size: 14px; color: #808080; margin-bottom: 40px; }
-        h2 { font-size: 20px; font-weight: 600; margin-top: 32px; margin-bottom: 12px; }
-        p, li { font-size: 16px; line-height: 1.7; color: #b3b3b3; margin-bottom: 12px; }
+        ::selection { background: var(--gold); color: #000; }
+        a:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+
+        nav {
+            position: sticky; top: 0; z-index: 10;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px clamp(20px, 5vw, 48px);
+            background: rgba(10, 10, 10, 0.72);
+            -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--line);
+        }
+        .wordmark {
+            display: flex; align-items: center; gap: 10px;
+            font-weight: 800; letter-spacing: 2px; font-size: 14px;
+            color: var(--text); text-decoration: none;
+        }
+        .wordmark img { width: 28px; height: 28px; border-radius: 7px; }
+        .wordmark .ghost-g { color: var(--gold); }
+        .nav-back { font-size: 13px; font-weight: 600; color: var(--dim); text-decoration: none; }
+        .nav-back:hover { color: var(--gold); }
+
+        .container { max-width: 680px; margin: 0 auto; padding: 70px 24px 90px; }
+        .eyebrow {
+            font-family: var(--mono); font-size: 12px; font-weight: 700;
+            letter-spacing: 4px; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 14px;
+        }
+        h1 { font-size: clamp(34px, 6vw, 46px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+        .updated { font-family: var(--mono); font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+        .tldr {
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin-bottom: 44px;
+            font-size: 15px; line-height: 1.6; color: var(--text);
+        }
+        h2 { font-size: 20px; font-weight: 700; margin: 36px 0 12px; }
+        p, li { font-size: 16px; line-height: 1.7; color: var(--dim); margin-bottom: 12px; }
+        strong { color: var(--text); }
         ul { padding-left: 20px; }
-        a { color: #ffd700; text-decoration: none; }
+        a { color: var(--gold); text-decoration: none; }
         a:hover { text-decoration: underline; }
-        .back { display: inline-block; margin-bottom: 24px; font-size: 14px; color: #808080; }
+
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 36px 24px 48px;
+            text-align: center;
+            color: var(--muted); font-size: 14px;
+        }
+        footer a { color: var(--dim); }
+        footer a:hover { color: var(--gold); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back">← Back to Ghost Beat</a>
+    <nav aria-label="Main">
+        <a class="wordmark" href="index.html">
+            <img src="favicon.png" alt="" width="28" height="28">
+            <span><span class="ghost-g">GHOST</span> BEAT</span>
+        </a>
+        <a class="nav-back" href="index.html">← Back to site</a>
+    </nav>
+
+    <main class="container">
+        <div class="eyebrow">Legal</div>
         <h1>Privacy Policy</h1>
-        <p class="updated">Last updated: March 30, 2026</p>
+        <p class="updated">LAST UPDATED: MARCH 30, 2026</p>
+
+        <div class="tldr"><strong>The short version:</strong> Ghost Beat collects nothing. No accounts, no analytics, no ads, no servers. Everything stays on your device.</div>
 
         <h2>Overview</h2>
         <p>Ghost Beat is designed with privacy in mind. We do not collect, store, or transmit any personal data. Everything stays on your device.</p>
@@ -66,6 +131,10 @@
 
         <h2>Contact</h2>
         <p>If you have questions about this privacy policy, contact us at <a href="mailto:lance.pederson@gmail.com">lance.pederson@gmail.com</a>.</p>
-    </div>
+    </main>
+
+    <footer>
+        <p>Ghost Beat © 2026 Will Pederson · <a href="index.html">ghostbeat</a></p>
+    </footer>
 </body>
 </html>
