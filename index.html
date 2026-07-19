@@ -3,25 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ghost Beat — Internal Timing Trainer</title>
+    <title>Ghost Beat — The Metronome That Disappears</title>
     <meta name="description" content="Ghost Beat is the metronome that trains your internal clock. Ghost bars cycle between audible and silent, forcing you to keep time on your own. iPhone & iPad.">
     <meta name="keywords" content="metronome app, timing trainer, ghost beat, drum practice, internal timing, iOS metronome, ghost bars, rhythm training, tap accuracy, practice tracker">
     <meta name="author" content="Will Pederson">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://willpederson.github.io/ghostbeat/">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
 
-    <meta property="og:title" content="Ghost Beat — Internal Timing Trainer">
-    <meta property="og:description" content="The metronome that disappears. Ghost bars force you to keep time without the click.">
+    <meta property="og:title" content="Ghost Beat — The Metronome That Disappears">
+    <meta property="og:description" content="Ghost bars force you to keep time without the click. Train your internal clock on iPhone & iPad.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://willpederson.github.io/ghostbeat/">
     <meta property="og:image" content="https://willpederson.github.io/ghostbeat/icon.png">
     <meta property="og:image:alt" content="Ghost Beat app icon">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Ghost Beat — Internal Timing Trainer">
-    <meta name="twitter:description" content="The metronome that disappears. Ghost bars force you to keep time without the click.">
+    <meta name="twitter:title" content="Ghost Beat — The Metronome That Disappears">
+    <meta name="twitter:description" content="Ghost bars force you to keep time without the click. Train your internal clock on iPhone & iPad.">
     <meta name="twitter:image" content="https://willpederson.github.io/ghostbeat/icon.png">
-    <meta name="theme-color" content="#121212">
+    <meta name="theme-color" content="#0a0a0a">
 
     <script type="application/ld+json">
     {
@@ -31,15 +33,8 @@
         "applicationCategory": "MusicApplication",
         "operatingSystem": "iOS",
         "description": "Ghost Beat is a timing trainer that cycles between audible and silent bars, training your internal clock. Features ghost bars, tap accuracy grading, practice routines, daily challenges, and detailed stats.",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "author": {
-            "@type": "Person",
-            "name": "Will Pederson"
-        },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Will Pederson" },
         "softwareVersion": "2.0",
         "datePublished": "2026-03"
     }
@@ -49,386 +44,936 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #121212;
-            --surface: #1a1a1a;
-            --well: #0d0d0d;
+            --bg: #0a0a0a;
+            --bg2: #101010;
+            --surface: rgba(255, 255, 255, 0.035);
             --gold: #ffd700;
-            --gold-glow: rgba(255, 215, 0, 0.15);
-            --neon: #a2ff00;
-            --neon-glow: rgba(162, 255, 0, 0.15);
+            --lime: #a2ff00;
             --cyan: #00e5ff;
-            --red: #e64040;
-            --text: #ffffff;
-            --text-dim: #b3b3b3;
-            --text-muted: #808080;
-            --border: rgba(255, 255, 255, 0.08);
+            --red: #ff4545;
+            --orange: #ff9f0a;
+            --text: #f4f4f4;
+            --dim: #9b9b9b;
+            --muted: #6b6b6b;
+            --line: rgba(255, 255, 255, 0.08);
+            --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace;
+            --beat-ms: 600ms;
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Rounded', 'Segoe UI', Roboto, sans-serif;
-            background:
-                radial-gradient(circle at 25% 15%, rgba(255, 215, 0, 0.04) 0%, transparent 40%),
-                radial-gradient(circle at 75% 85%, rgba(162, 255, 0, 0.03) 0%, transparent 40%),
-                linear-gradient(145deg, #0a0a0a 0%, #121212 50%, #0d0d0d 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
             color: var(--text);
-            min-height: 100vh;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
+
+        ::selection { background: var(--gold); color: #000; }
 
         .skip-link {
-            position: fixed; top: 12px; left: 12px; z-index: 100;
+            position: fixed; top: 12px; left: 12px; z-index: 200;
             padding: 10px 14px; border-radius: 10px;
-            background: var(--gold); color: #000; font-weight: 700;
-            transform: translateY(-160%); transition: transform 0.2s ease;
+            background: var(--gold); color: #000; font-weight: 700; text-decoration: none;
+            transform: translateY(-200%); transition: transform 0.2s ease;
         }
         .skip-link:focus { transform: translateY(0); }
-        a:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+        a:focus-visible, button:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
 
-        /* Hero */
+        /* ---------- nav ---------- */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px clamp(20px, 5vw, 48px);
+            background: rgba(10, 10, 10, 0.72);
+            -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        nav.scrolled { border-bottom-color: var(--line); }
+        .wordmark {
+            display: flex; align-items: center; gap: 10px;
+            font-weight: 800; letter-spacing: 2px; font-size: 14px;
+            color: var(--text); text-decoration: none;
+        }
+        .wordmark img { width: 28px; height: 28px; border-radius: 7px; }
+        .wordmark .ghost-g { color: var(--gold); }
+        .nav-cta {
+            font-size: 13px; font-weight: 700; text-decoration: none;
+            color: #000; background: var(--gold);
+            padding: 9px 18px; border-radius: 100px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .nav-cta:hover { transform: scale(1.05); box-shadow: 0 4px 24px rgba(255, 215, 0, 0.35); }
+
+        /* ---------- hero ---------- */
         .hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 60px 24px;
+            min-height: 100svh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
             text-align: center;
+            padding: 110px 24px 80px;
             position: relative;
         }
-
         .hero::before {
             content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
-            border-radius: 50%;
-            top: 15%;
-            left: 50%;
-            transform: translateX(-50%);
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--line) 1px, transparent 1px);
+            background-size: 72px 72px;
+            -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 42%, #000 0%, transparent 70%);
+            mask-image: radial-gradient(ellipse 70% 55% at 50% 42%, #000 0%, transparent 70%);
+            opacity: 0.5;
             pointer-events: none;
-            filter: blur(40px);
+        }
+        .hero-glow {
+            position: absolute; width: 640px; height: 640px;
+            top: 8%; left: 50%; transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.09) 0%, transparent 65%);
+            filter: blur(30px); pointer-events: none;
         }
 
-        .app-icon {
-            width: 140px;
-            height: 140px;
-            border-radius: 31px;
-            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.15), 0 0 80px rgba(255, 215, 0, 0.05);
-            margin-bottom: 32px;
-            position: relative;
-            z-index: 1;
+        /* live sequencer */
+        .sequencer {
+            position: relative; z-index: 1;
+            display: flex; flex-direction: column; align-items: center; gap: 14px;
+            margin-bottom: 48px;
         }
-
-        h1 {
-            font-size: 52px;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, #ffffff 0%, var(--gold) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .seq-label {
+            font-family: var(--mono);
+            font-size: 12px; letter-spacing: 5px; font-weight: 700;
+            color: var(--lime);
+            transition: color 0.25s ease;
         }
-
-        .subtitle {
-            font-size: 20px;
-            color: var(--text-dim);
-            font-weight: 500;
-            margin-bottom: 40px;
-            max-width: 520px;
-            line-height: 1.5;
-        }
-
-        .cta-buttons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 16px 32px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary {
-            background: var(--gold);
-            color: #000;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.06);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .btn svg { width: 22px; height: 22px; }
-
-        .platform-note {
-            margin-top: 12px;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .scroll-hint {
-            position: absolute;
-            bottom: 40px;
-            color: var(--text-muted);
-            font-size: 13px;
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(8px); }
-        }
-
-        /* Sections */
-        .features { padding: 80px 24px 100px; max-width: 1100px; margin: 0 auto; }
-        .features h2 { text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 16px; }
-        .features .section-sub {
-            text-align: center; color: var(--text-dim); font-size: 17px;
-            margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto;
-        }
-
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 32px;
-            transition: all 0.2s ease;
-        }
-        .feature-card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 215, 0, 0.2);
-            transform: translateY(-4px);
-        }
-
-        .feature-icon { font-size: 32px; margin-bottom: 16px; }
-        .feature-card h3 { font-size: 19px; font-weight: 700; margin-bottom: 8px; color: var(--gold); }
-        .feature-card p { color: var(--text-dim); font-size: 15px; line-height: 1.6; }
-
-        .pro-badge {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 700;
-            background: var(--gold);
-            color: #000;
-            padding: 2px 8px;
-            border-radius: 20px;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-
-        /* How it works */
-        .how-it-works { padding: 80px 24px 100px; max-width: 800px; margin: 0 auto; }
-        .how-it-works h2 { text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 50px; }
-
-        .step { display: flex; gap: 24px; margin-bottom: 40px; align-items: flex-start; }
-        .step-num {
-            flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
-            background: var(--gold-glow); border: 1px solid rgba(255, 215, 0, 0.3);
+        .sequencer.silent .seq-label { color: var(--orange); }
+        .pads { display: flex; gap: 10px; }
+        .pad {
+            width: clamp(58px, 15vw, 84px); height: clamp(40px, 10vw, 54px);
+            border-radius: 12px;
+            border: 1px solid rgba(162, 255, 0, 0.35);
+            background: rgba(162, 255, 0, 0.07);
+            color: rgba(162, 255, 0, 0.8);
+            font-family: var(--mono); font-weight: 700; font-size: 16px;
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 18px; color: var(--gold);
+            transition: all 0.12s ease;
         }
-        .step-content h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-        .step-content p { color: var(--text-dim); font-size: 15px; line-height: 1.6; }
-
-        /* Specs */
-        .specs { padding: 60px 24px 100px; max-width: 700px; margin: 0 auto; }
-        .specs h2 { text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 40px; }
-        .spec-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .spec-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 14px; padding: 20px;
+        .pad.hit {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: #000;
+            box-shadow: 0 0 32px rgba(255, 215, 0, 0.55);
+            transform: scale(1.07);
         }
-        .spec-item .label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; }
-        .spec-item .value { font-size: 16px; font-weight: 600; }
-        .spec-item .value .neon { color: var(--neon); }
+        .sequencer.silent .pad {
+            border-color: rgba(255, 69, 69, 0.3);
+            background: rgba(255, 69, 69, 0.05);
+            color: rgba(255, 69, 69, 0.6);
+        }
+        .sequencer.silent .pad.hit {
+            background: rgba(255, 69, 69, 0.14);
+            border-color: var(--red);
+            color: var(--red);
+            box-shadow: 0 0 24px rgba(255, 69, 69, 0.2);
+            transform: scale(1.03);
+        }
 
-        /* Footer */
+        .hero h1 {
+            position: relative; z-index: 1;
+            font-size: clamp(44px, 9vw, 104px);
+            font-weight: 850;
+            letter-spacing: -0.03em;
+            line-height: 1.02;
+            margin-bottom: 24px;
+        }
+        .hero h1 .l1 { display: block; }
+        .hero h1 .l2 {
+            display: block;
+            background: linear-gradient(120deg, var(--gold) 20%, #fff2a8 50%, var(--gold) 80%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 5s ease-in-out infinite, dissolve 4.8s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 0; }
+            50% { background-position: 100% 0; }
+        }
+        @keyframes dissolve {
+            0%, 44% { opacity: 1; filter: blur(0); }
+            56%, 88% { opacity: 0.14; filter: blur(5px); }
+            100% { opacity: 1; filter: blur(0); }
+        }
+
+        .hero .tagline {
+            position: relative; z-index: 1;
+            font-size: clamp(16px, 2.4vw, 20px);
+            color: var(--dim); line-height: 1.55;
+            max-width: 560px; margin-bottom: 40px;
+        }
+        .hero .tagline strong { color: var(--text); font-weight: 600; }
+
+        .store-badge { display: inline-block; position: relative; z-index: 1; transition: transform 0.18s ease, filter 0.18s ease; }
+        .store-badge:hover { transform: scale(1.045); filter: drop-shadow(0 6px 28px rgba(255, 255, 255, 0.18)); }
+        .store-badge svg { display: block; height: 56px; width: auto; }
+
+        .hero .fine {
+            position: relative; z-index: 1;
+            margin-top: 18px; font-size: 13px; color: var(--muted);
+            font-family: var(--mono); letter-spacing: 0.5px;
+        }
+
+        .scroll-cue {
+            position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+            width: 22px; height: 36px; border: 2px solid var(--muted); border-radius: 12px;
+        }
+        .scroll-cue::after {
+            content: ''; position: absolute; top: 6px; left: 50%; margin-left: -2px;
+            width: 4px; height: 8px; border-radius: 2px; background: var(--gold);
+            animation: cue 1.8s ease-in-out infinite;
+        }
+        @keyframes cue {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            60% { transform: translateY(12px); opacity: 0; }
+        }
+
+        /* ---------- reveal on scroll (only hidden when JS is running) ---------- */
+        .rv { transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+        .js .rv:not(.in) { opacity: 0; transform: translateY(28px); }
+        .rv-d1 { transition-delay: 0.08s; } .rv-d2 { transition-delay: 0.16s; }
+        .rv-d3 { transition-delay: 0.24s; } .rv-d4 { transition-delay: 0.32s; }
+
+        section { position: relative; }
+        .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        .eyebrow {
+            font-family: var(--mono); font-size: 12px; font-weight: 700;
+            letter-spacing: 4px; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 14px;
+        }
+        h2 { font-size: clamp(30px, 5vw, 46px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+        .sub { color: var(--dim); font-size: 17px; line-height: 1.6; max-width: 620px; margin-top: 16px; }
+
+        /* ---------- demo ---------- */
+        .demo-sec { padding: 120px 0; }
+        .demo-head { text-align: center; }
+        .demo-head .eyebrow { color: var(--cyan); }
+        .demo-box {
+            margin: 48px auto 0; max-width: 640px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            padding: clamp(24px, 5vw, 44px);
+            text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .demo-box::before {
+            content: ''; position: absolute; inset: -1px;
+            border-radius: 28px; padding: 1px;
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.35), transparent 30%, transparent 70%, rgba(255, 215, 0, 0.35));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            pointer-events: none;
+        }
+        .demo-status {
+            font-family: var(--mono); font-size: 13px; letter-spacing: 3px; font-weight: 700;
+            color: var(--muted); min-height: 20px; margin-bottom: 22px; text-transform: uppercase;
+        }
+        .demo-status.listen { color: var(--lime); }
+        .demo-status.ghost { color: var(--orange); }
+        .demo-beats { display: flex; gap: 8px; justify-content: center; margin-bottom: 28px; }
+        .db {
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 2px solid var(--line);
+            font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--muted);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.12s ease;
+        }
+        .db.click { border-color: var(--lime); color: var(--lime); }
+        .db.flash { background: var(--lime); color: #000; box-shadow: 0 0 24px rgba(162, 255, 0, 0.5); transform: scale(1.12); }
+        .db.ghosted { border-style: dashed; border-color: rgba(255, 159, 10, 0.5); color: var(--orange); }
+        .db.good { background: var(--lime); border-color: var(--lime); color: #000; }
+        .db.ok { background: var(--gold); border-color: var(--gold); color: #000; }
+        .db.bad { background: var(--red); border-color: var(--red); color: #fff; }
+        .db.miss { background: transparent; border-color: var(--red); color: var(--red); }
+
+        .tap-zone {
+            width: 100%; height: 120px;
+            border-radius: 20px;
+            border: 1px dashed rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--dim);
+            font-size: 16px; font-weight: 600;
+            cursor: pointer;
+            transition: background 0.1s ease, border-color 0.1s ease, transform 0.06s ease;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            user-select: none; -webkit-user-select: none;
+            font-family: inherit;
+        }
+        .tap-zone:active { transform: scale(0.985); background: rgba(255, 215, 0, 0.08); border-color: var(--gold); }
+        .tap-zone.armed { border-color: var(--cyan); color: var(--text); }
+        .tap-zone .key-hint { display: block; margin-top: 6px; font-size: 12px; color: var(--muted); font-family: var(--mono); }
+
+        .demo-result { margin-top: 26px; display: none; }
+        .demo-result.show { display: block; animation: pop 0.45s cubic-bezier(0.2, 1.4, 0.4, 1); }
+        @keyframes pop { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .grade-ring {
+            width: 110px; height: 110px; margin: 0 auto 14px;
+            border-radius: 50%; border: 4px solid var(--lime);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 46px; font-weight: 850;
+            color: var(--lime);
+            text-shadow: 0 0 24px currentColor;
+        }
+        .grade-verdict { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+        .grade-detail { font-family: var(--mono); font-size: 13px; color: var(--dim); }
+        .demo-cta-row { margin-top: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn-ghostly {
+            font-family: inherit; font-size: 15px; font-weight: 700;
+            background: var(--gold); color: #000; border: none; cursor: pointer;
+            padding: 14px 30px; border-radius: 100px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .btn-ghostly:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3); }
+        .btn-quiet {
+            font-family: inherit; font-size: 15px; font-weight: 600;
+            background: transparent; color: var(--dim); cursor: pointer;
+            border: 1px solid var(--line);
+            padding: 14px 30px; border-radius: 100px;
+            transition: all 0.15s ease;
+        }
+        .btn-quiet:hover { color: var(--text); border-color: rgba(255, 255, 255, 0.25); }
+
+        /* ---------- showcase ---------- */
+        .showcase { padding: 60px 0 120px; }
+        .show-grid {
+            display: grid; grid-template-columns: minmax(300px, 420px) 1fr;
+            gap: clamp(40px, 7vw, 100px);
+            align-items: start;
+        }
+        .phone-stick { position: sticky; top: 90px; }
+        .phone-frame {
+            position: relative;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 40px 90px rgba(0, 0, 0, 0.7), 0 0 70px rgba(255, 215, 0, 0.06);
+            aspect-ratio: 719 / 1440;
+        }
+        .phone-frame img {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0; transform: scale(1.035);
+            transition: opacity 0.5s ease, transform 0.7s ease;
+        }
+        .phone-frame img.on { opacity: 1; transform: scale(1); }
+
+        .show-steps { display: flex; flex-direction: column; }
+        .show-step {
+            min-height: 62vh;
+            display: flex; flex-direction: column; justify-content: center;
+            border-left: 2px solid var(--line);
+            padding-left: clamp(22px, 3vw, 40px);
+            transition: border-color 0.4s ease;
+        }
+        .show-step.active { border-left-color: var(--gold); }
+        .show-step .eyebrow { margin-bottom: 10px; }
+        .show-step h3 { font-size: clamp(24px, 3.4vw, 34px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 14px; }
+        .show-step p { color: var(--dim); font-size: 16px; line-height: 1.65; max-width: 440px; }
+        .show-step .chip {
+            display: inline-block; margin-top: 18px;
+            font-family: var(--mono); font-size: 12px; letter-spacing: 1px;
+            color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.3);
+            padding: 6px 12px; border-radius: 100px;
+            align-self: flex-start;
+        }
+
+        /* mobile carousel fallback */
+        .carousel { display: none; }
+        @media (max-width: 899px) {
+            .show-grid { display: none; }
+            .carousel {
+                display: flex; gap: 16px;
+                overflow-x: auto; scroll-snap-type: x mandatory;
+                padding: 40px 24px; margin: 0 -24px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .carousel::-webkit-scrollbar { display: none; }
+            .car-item { flex: 0 0 72%; max-width: 300px; scroll-snap-align: center; }
+            .car-item img {
+                width: 100%; border-radius: 28px;
+                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+            }
+            .car-item figcaption { margin-top: 14px; text-align: center; }
+            .car-item figcaption b { display: block; font-size: 15px; margin-bottom: 4px; }
+            .car-item figcaption span { font-size: 13px; color: var(--dim); line-height: 1.5; }
+        }
+
+        /* ---------- features ---------- */
+        .features-sec { padding: 110px 0; background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.015) 20%, rgba(255, 255, 255, 0.015) 80%, transparent); }
+        .feat-grid {
+            margin-top: 56px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 16px;
+        }
+        .feat {
+            position: relative;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 28px;
+            overflow: hidden;
+            transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+        .feat:hover { transform: translateY(-5px); border-color: rgba(255, 215, 0, 0.28); }
+        .feat::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 215, 0, 0.09), transparent 45%);
+            opacity: 0; transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .feat:hover::before { opacity: 1; }
+        .feat .glyph {
+            width: 44px; height: 44px; border-radius: 12px;
+            background: rgba(255, 215, 0, 0.09);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 21px; margin-bottom: 18px;
+        }
+        .feat h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+        .feat p { color: var(--dim); font-size: 14px; line-height: 1.6; }
+        .pro-tag {
+            display: inline-block; vertical-align: 2px;
+            font-size: 9px; font-weight: 800; letter-spacing: 1px;
+            background: var(--gold); color: #000;
+            padding: 2px 7px; border-radius: 100px; margin-left: 8px;
+        }
+
+        /* ---------- ticker ---------- */
+        .ticker-sec { padding: 40px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden; }
+        .ticker { display: flex; width: max-content; animation: tick 36s linear infinite; }
+        .ticker-sec:hover .ticker { animation-play-state: paused; }
+        .tick-group { display: flex; align-items: center; gap: 36px; padding-right: 36px; white-space: nowrap; }
+        .tick-item { font-family: var(--mono); font-size: 14px; letter-spacing: 1px; color: var(--dim); }
+        .tick-item b { color: var(--gold); font-weight: 700; }
+        .tick-dot { color: var(--muted); font-size: 9px; }
+        @keyframes tick { to { transform: translateX(-50%); } }
+
+        /* ---------- final CTA ---------- */
+        .cta-sec { padding: 150px 24px 130px; text-align: center; position: relative; overflow: hidden; }
+        .rings { position: absolute; top: 50%; left: 50%; width: 0; height: 0; pointer-events: none; }
+        .ring {
+            position: absolute; top: 50%; left: 50%;
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: ripple 4.8s ease-out infinite;
+            width: 120px; height: 120px;
+            opacity: 0;
+        }
+        .ring:nth-child(2) { animation-delay: 1.2s; }
+        .ring:nth-child(3) { animation-delay: 2.4s; }
+        .ring:nth-child(4) { animation-delay: 3.6s; }
+        @keyframes ripple {
+            0% { width: 120px; height: 120px; opacity: 0.9; }
+            100% { width: 780px; height: 780px; opacity: 0; }
+        }
+        .cta-icon {
+            width: 108px; height: 108px; border-radius: 26px;
+            box-shadow: 0 18px 60px rgba(255, 215, 0, 0.22);
+            margin-bottom: 30px; position: relative; z-index: 1;
+        }
+        .cta-sec h2 { position: relative; z-index: 1; margin-bottom: 14px; }
+        .cta-sec .sub { margin: 0 auto 38px; position: relative; z-index: 1; }
+        .cta-sec .fine { margin-top: 18px; font-size: 13px; color: var(--muted); font-family: var(--mono); position: relative; z-index: 1; }
+
         footer {
-            text-align: center; padding: 40px 24px 60px;
-            color: var(--text-muted); font-size: 14px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid var(--line);
+            padding: 44px 24px 56px;
+            text-align: center;
+            color: var(--muted); font-size: 14px;
         }
-        footer a { color: var(--text-dim); text-decoration: none; }
+        footer .foot-links { margin-bottom: 12px; display: flex; gap: 26px; justify-content: center; flex-wrap: wrap; }
+        footer a { color: var(--dim); text-decoration: none; transition: color 0.15s ease; }
         footer a:hover { color: var(--gold); }
+        footer .privacy-line { font-family: var(--mono); font-size: 12px; letter-spacing: 1px; margin-top: 14px; color: var(--muted); }
 
         @media (max-width: 640px) {
-            h1 { font-size: 36px; }
-            .subtitle { font-size: 17px; }
-            .app-icon { width: 110px; height: 110px; border-radius: 25px; }
-            .features h2, .how-it-works h2, .specs h2 { font-size: 28px; }
-            .spec-list { grid-template-columns: 1fr; }
+            .demo-sec, .features-sec { padding: 80px 0; }
+            .cta-sec { padding: 110px 24px 90px; }
+            .store-badge svg { height: 50px; }
         }
 
         @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
-                scroll-behavior: auto !important;
                 transition-duration: 0.01ms !important;
             }
+            .rv { opacity: 1; transform: none; }
         }
     </style>
 </head>
 <body>
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a class="skip-link" href="#main">Skip to main content</a>
 
-    <main id="main-content">
-    <section class="hero">
-        <img src="icon.png" alt="Ghost Beat App Icon" class="app-icon">
-        <h1>Ghost Beat</h1>
-        <p class="subtitle">The metronome that disappears. Ghost bars cycle between audible and silent — your job is to keep the tempo when the click is gone.</p>
-        <div class="cta-buttons">
-            <a href="https://apps.apple.com/app/ghost-beat-timing-trainer/id6743352015" class="btn btn-primary">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                Download on the App Store
-            </a>
+    <nav id="nav" aria-label="Main">
+        <a class="wordmark" href="#top">
+            <img src="favicon.png" alt="" width="28" height="28">
+            <span><span class="ghost-g">GHOST</span> BEAT</span>
+        </a>
+        <a class="nav-cta" href="https://apps.apple.com/app/ghost-beat-timing-trainer/id6743352015">Get the app</a>
+    </nav>
+
+    <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top">
+        <div class="hero-glow" aria-hidden="true"></div>
+
+        <div class="sequencer" id="seq" aria-hidden="true">
+            <div class="seq-label" id="seqLabel">AUDIBLE</div>
+            <div class="pads">
+                <div class="pad">1</div>
+                <div class="pad">2</div>
+                <div class="pad">3</div>
+                <div class="pad">4</div>
+            </div>
         </div>
-        <p class="platform-note">Free with optional Pro upgrade · iPhone & iPad</p>
-        <div class="scroll-hint">↓ Learn more</div>
+
+        <h1>
+            <span class="l1">The click</span>
+            <span class="l2">disappears.</span>
+        </h1>
+        <p class="tagline">Any metronome keeps time <strong>for</strong> you. Ghost Beat cycles between audible and silent bars — so when the click drops out, <strong>your</strong> internal clock has to carry the beat.</p>
+
+        <a class="store-badge" href="https://apps.apple.com/app/ghost-beat-timing-trainer/id6743352015" aria-label="Download Ghost Beat on the App Store">
+            <svg viewBox="0 0 200 60" role="img" aria-hidden="true">
+                <rect x="1" y="1" width="198" height="58" rx="12" fill="#000" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+                <g transform="translate(17 15) scale(1.3)" fill="#fff">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </g>
+                <text x="58" y="26" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11">Download on the</text>
+                <text x="58" y="45" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="600">App Store</text>
+            </svg>
+        </a>
+        <p class="fine">FREE · PRO $2.99 · IPHONE &amp; IPAD</p>
+
+        <div class="scroll-cue" aria-hidden="true"></div>
     </section>
 
-    <section class="features" id="features">
-        <h2>Survival Training for Your Internal Clock</h2>
-        <p class="section-sub">Every feature is designed around one goal: making you keep time without relying on the click.</p>
+    <!-- ============ LIVE DEMO ============ -->
+    <section class="demo-sec" id="demo">
+        <div class="wrap">
+            <div class="demo-head rv">
+                <div class="eyebrow">Try it right here</div>
+                <h2>Think your timing is good?</h2>
+                <p class="sub" style="margin-left:auto;margin-right:auto;">One bar of clicks. One bar of silence. Tap the beat while it's gone and we'll grade you — same engine idea as the app's Tap Accuracy mode.</p>
+            </div>
 
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon">👻</div>
-                <h3>Ghost Bars</h3>
-                <p>Set how many bars play and how many go silent. 2 on, 2 off. 1 on, 3 off. When the click vanishes, your real timing shows up.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎲</div>
-                <h3>Random Mute</h3>
-                <p>Individual beats disappear unpredictably. You never know which one is next. Pure internal time training.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎯</div>
-                <h3>Tap Accuracy</h3>
-                <p>Tap along with the beat and get graded S through D. Calibrates to your touch latency, then measures real timing deviation.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📋</div>
-                <h3>Practice Routines</h3>
-                <p>Chain exercises into timed sessions. Set BPM, on/off bars, and time signature per step. Hit play and the routine runs itself.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🏆</div>
-                <h3>Daily Challenges</h3>
-                <p>A new timing challenge every day — survive ghost bars, hit accuracy targets, or hold tempo for a set time. Stay sharp.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3>Practice Stats</h3>
-                <p>Streaks, session history, timing grades, and weekly charts. See your progress measured in timing-specific terms, not just minutes.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📉</div>
-                <h3>Progressive Difficulty <span class="pro-badge">PRO</span></h3>
-                <p>Beats gradually fade out over bars until you're playing in complete silence. The ultimate test of internal pulse.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎛️</div>
-                <h3>Deep Customization</h3>
-                <p>6 time signatures, 7 subdivisions (down to 1/32T), 4 click sounds, accent patterns, pitch control, count-ins, and haptic feedback.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="how-it-works">
-        <h2>How It Works</h2>
-        <div class="step">
-            <div class="step-num">1</div>
-            <div class="step-content">
-                <h3>Set your tempo and ghost bars</h3>
-                <p>Dial in BPM with the jog wheel. Set ON bars (click plays) and OFF bars (silence). Start simple: 3 on, 1 off.</p>
-            </div>
-        </div>
-        <div class="step">
-            <div class="step-num">2</div>
-            <div class="step-content">
-                <h3>Play through the silence</h3>
-                <p>When the click drops out, keep going. Stay exactly where the beat would be. When it comes back, see if you drifted.</p>
-            </div>
-        </div>
-        <div class="step">
-            <div class="step-num">3</div>
-            <div class="step-content">
-                <h3>Measure your timing</h3>
-                <p>Turn on Tap Accuracy and tap along. Get graded on every tap — see your deviation in milliseconds and watch your grade climb.</p>
-            </div>
-        </div>
-        <div class="step">
-            <div class="step-num">4</div>
-            <div class="step-content">
-                <h3>Push harder</h3>
-                <p>Increase off bars, enable random mute, try daily challenges. Build the kind of timing that doesn't need a safety net.</p>
+            <div class="demo-box rv rv-d1">
+                <div class="demo-status" id="demoStatus">100 BPM · 4/4 · SOUND ON</div>
+                <div class="demo-beats" id="demoBeats" aria-hidden="true">
+                    <div class="db click">1</div><div class="db click">2</div><div class="db click">3</div><div class="db click">4</div>
+                    <div class="db ghosted">1</div><div class="db ghosted">2</div><div class="db ghosted">3</div><div class="db ghosted">4</div>
+                </div>
+                <button class="tap-zone" id="tapZone">
+                    Press start, listen to one bar, then tap the silent beats
+                    <span class="key-hint">desktop: spacebar works too</span>
+                </button>
+                <div class="demo-result" id="demoResult" aria-live="polite">
+                    <div class="grade-ring" id="gradeRing">A</div>
+                    <div class="grade-verdict" id="gradeVerdict">Locked in.</div>
+                    <div class="grade-detail" id="gradeDetail"></div>
+                </div>
+                <div class="demo-cta-row">
+                    <button class="btn-ghostly" id="demoStart">Start the test</button>
+                    <a class="btn-quiet" id="demoAppLink" href="https://apps.apple.com/app/ghost-beat-timing-trainer/id6743352015" style="display:none; text-decoration:none;">Train this in the app</a>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="specs">
-        <h2>At a Glance</h2>
-        <div class="spec-list">
-            <div class="spec-item">
-                <div class="label">BPM Range</div>
-                <div class="value">20 – 300</div>
+    <!-- ============ SHOWCASE ============ -->
+    <section class="showcase" id="app">
+        <div class="wrap">
+            <div class="rv" style="margin-bottom: 30px;">
+                <div class="eyebrow">Inside the app</div>
+                <h2>A precision instrument,<br>not another metronome skin.</h2>
             </div>
-            <div class="spec-item">
-                <div class="label">Time Signatures</div>
-                <div class="value">2/4, 3/4, 4/4, 5/4, 6/8, 7/8</div>
+
+            <!-- desktop: sticky phone + scroll steps -->
+            <div class="show-grid">
+                <div class="phone-stick">
+                    <div class="phone-frame" id="phoneFrame">
+                        <img src="shots/01_hero.png" class="on" alt="Ghost Beat player with jog wheel, beat pads, and 100 BPM display" data-shot="0">
+                        <img src="shots/02_ghost_bars.png" alt="Ghost Beat in a silent bar — beat pads dimmed red, 4 on / 4 off" data-shot="1" loading="lazy">
+                        <img src="shots/03_timing.png" alt="Timing Summary screen with 99% accuracy and an A grade" data-shot="2" loading="lazy">
+                        <img src="shots/05_routines.png" alt="Practice routines list with BPM steps per routine" data-shot="3" loading="lazy">
+                        <img src="shots/04_stats.png" alt="Practice Stats with charts, streaks and timing insights" data-shot="4" loading="lazy">
+                    </div>
+                </div>
+                <div class="show-steps" id="showSteps">
+                    <div class="show-step" data-shot="0">
+                        <div class="eyebrow">The player</div>
+                        <h3>Dial it in with the jog wheel.</h3>
+                        <p>20–300 BPM on a proper rotary wheel. Set ON bars and OFF bars, pick your time signature and subdivision, and hit play. The pads track every beat in real time.</p>
+                        <span class="chip">20–300 BPM · 6 time signatures</span>
+                    </div>
+                    <div class="show-step" data-shot="1">
+                        <div class="eyebrow">Ghost bars</div>
+                        <h3>Then the click walks out.</h3>
+                        <p>The pads turn red, the room goes quiet, and the tempo is yours to lose. 2 on / 2 off to start — work up to one audible bar in eight. Random Mute makes single beats vanish unpredictably.</p>
+                        <span class="chip">SILENT · hold the line</span>
+                    </div>
+                    <div class="show-step" data-shot="2">
+                        <div class="eyebrow">Tap accuracy</div>
+                        <h3>Your timing, in milliseconds.</h3>
+                        <p>Tap along and get graded S through D on every session. It calibrates to your device's touch latency first, so the number you see is your timing — not your screen's.</p>
+                        <span class="chip">avg deviation · consistency · grade</span>
+                    </div>
+                    <div class="show-step" data-shot="3">
+                        <div class="eyebrow">Routines</div>
+                        <h3>Practice that runs itself.</h3>
+                        <p>Chain exercises into timed sessions — BPM, ghost pattern and time signature per step. Speed builders, ghost-mode ladders, daily warm-ups. Press start once.</p>
+                        <span class="chip">auto-advancing steps</span>
+                    </div>
+                    <div class="show-step" data-shot="4">
+                        <div class="eyebrow">Progress</div>
+                        <h3>Proof you're getting better.</h3>
+                        <p>Streaks, session history, weekly charts, best grades and consistency trends — progress measured in timing terms, not just minutes on a clock.</p>
+                        <span class="chip">100% stored on-device</span>
+                    </div>
+                </div>
             </div>
-            <div class="spec-item">
-                <div class="label">Subdivisions</div>
-                <div class="value">1/4 through 1/32T</div>
-            </div>
-            <div class="spec-item">
-                <div class="label">Platform</div>
-                <div class="value">iPhone & iPad</div>
-            </div>
-            <div class="spec-item">
-                <div class="label">Price</div>
-                <div class="value">Free · <span class="neon">Pro $2.99</span></div>
-            </div>
-            <div class="spec-item">
-                <div class="label">Version</div>
-                <div class="value">2.0</div>
-            </div>
-            <div class="spec-item">
-                <div class="label">Background Audio</div>
-                <div class="value">Yes</div>
-            </div>
-            <div class="spec-item">
-                <div class="label">Data</div>
-                <div class="value">100% on-device</div>
+
+            <!-- mobile: snap carousel -->
+            <div class="carousel" aria-label="App screenshots">
+                <figure class="car-item">
+                    <img src="shots/01_hero.png" alt="Ghost Beat player with jog wheel and beat pads">
+                    <figcaption><b>The player</b><span>Jog wheel, 20–300 BPM, on/off bars, live beat pads.</span></figcaption>
+                </figure>
+                <figure class="car-item">
+                    <img src="shots/02_ghost_bars.png" alt="Ghost Beat during a silent bar" loading="lazy">
+                    <figcaption><b>Ghost bars</b><span>The click drops out. The tempo is yours to lose.</span></figcaption>
+                </figure>
+                <figure class="car-item">
+                    <img src="shots/03_timing.png" alt="Timing summary with A grade" loading="lazy">
+                    <figcaption><b>Tap accuracy</b><span>Graded S–D, measured in milliseconds.</span></figcaption>
+                </figure>
+                <figure class="car-item">
+                    <img src="shots/05_routines.png" alt="Practice routines" loading="lazy">
+                    <figcaption><b>Routines</b><span>Chained exercises that auto-advance.</span></figcaption>
+                </figure>
+                <figure class="car-item">
+                    <img src="shots/04_stats.png" alt="Practice stats" loading="lazy">
+                    <figcaption><b>Progress</b><span>Streaks, charts, grades — all on-device.</span></figcaption>
+                </figure>
             </div>
         </div>
     </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section class="features-sec" id="features">
+        <div class="wrap">
+            <div class="rv">
+                <div class="eyebrow">The full stack</div>
+                <h2>Everything serves one goal:<br>time you can trust.</h2>
+            </div>
+            <div class="feat-grid">
+                <div class="feat rv"><div class="glyph">👻</div><h3>Ghost Bars</h3><p>Set how many bars play and how many go silent. 2 on, 2 off. 1 on, 3 off. When the click vanishes, your real timing shows up.</p></div>
+                <div class="feat rv rv-d1"><div class="glyph">🎲</div><h3>Random Mute</h3><p>Individual beats disappear unpredictably. You never know which one is next. Pure internal time training.</p></div>
+                <div class="feat rv rv-d2"><div class="glyph">🎯</div><h3>Tap Accuracy</h3><p>Tap along with the beat and get graded S through D. Calibrates to your touch latency, then measures real timing deviation.</p></div>
+                <div class="feat rv rv-d3"><div class="glyph">📋</div><h3>Practice Routines</h3><p>Chain exercises into timed sessions. Set BPM, on/off bars, and time signature per step. Hit play and the routine runs itself.</p></div>
+                <div class="feat rv"><div class="glyph">🏆</div><h3>Daily Challenges</h3><p>A new timing challenge every day — survive ghost bars, hit accuracy targets, or hold tempo for a set time. Stay sharp.</p></div>
+                <div class="feat rv rv-d1"><div class="glyph">📊</div><h3>Practice Stats</h3><p>Streaks, session history, timing grades, and weekly charts. Progress measured in timing-specific terms, not just minutes.</p></div>
+                <div class="feat rv rv-d2"><div class="glyph">📉</div><h3>Progressive Difficulty<span class="pro-tag">PRO</span></h3><p>Beats gradually fade out over bars until you're playing in complete silence. The ultimate test of internal pulse.</p></div>
+                <div class="feat rv rv-d3"><div class="glyph">🎛️</div><h3>Deep Customization</h3><p>6 time signatures, 7 subdivisions (down to 1/32T), 4 click sounds, accent patterns, pitch control, count-ins, and haptics.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ TICKER ============ -->
+    <section class="ticker-sec" aria-hidden="true">
+        <div class="ticker">
+            <div class="tick-group">
+                <span class="tick-item"><b>20–300</b> BPM</span><span class="tick-dot">◆</span>
+                <span class="tick-item"><b>6</b> TIME SIGNATURES</span><span class="tick-dot">◆</span>
+                <span class="tick-item">1/4 → <b>1/32T</b> SUBDIVISIONS</span><span class="tick-dot">◆</span>
+                <span class="tick-item"><b>4</b> CLICK SOUNDS</span><span class="tick-dot">◆</span>
+                <span class="tick-item">BACKGROUND AUDIO</span><span class="tick-dot">◆</span>
+                <span class="tick-item"><b>100%</b> ON-DEVICE</span><span class="tick-dot">◆</span>
+                <span class="tick-item">NO ACCOUNTS</span><span class="tick-dot">◆</span>
+                <span class="tick-item">NO TRACKING</span><span class="tick-dot">◆</span>
+                <span class="tick-item">IPHONE &amp; IPAD</span><span class="tick-dot">◆</span>
+                <span class="tick-item">FREE · PRO <b>$2.99</b></span><span class="tick-dot">◆</span>
+            </div>
+            <div class="tick-group">
+                <span class="tick-item"><b>20–300</b> BPM</span><span class="tick-dot">◆</span>
+                <span class="tick-item"><b>6</b> TIME SIGNATURES</span><span class="tick-dot">◆</span>
+                <span class="tick-item">1/4 → <b>1/32T</b> SUBDIVISIONS</span><span class="tick-dot">◆</span>
+                <span class="tick-item"><b>4</b> CLICK SOUNDS</span><span class="tick-dot">◆</span>
+                <span class="tick-item">BACKGROUND AUDIO</span><span class="tick-dot">◆</span>
+                <span class="tick-item"><b>100%</b> ON-DEVICE</span><span class="tick-dot">◆</span>
+                <span class="tick-item">NO ACCOUNTS</span><span class="tick-dot">◆</span>
+                <span class="tick-item">NO TRACKING</span><span class="tick-dot">◆</span>
+                <span class="tick-item">IPHONE &amp; IPAD</span><span class="tick-dot">◆</span>
+                <span class="tick-item">FREE · PRO <b>$2.99</b></span><span class="tick-dot">◆</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta-sec" id="download">
+        <div class="rings" aria-hidden="true"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
+        <img src="icon.png" alt="Ghost Beat app icon" class="cta-icon rv" width="108" height="108">
+        <h2 class="rv rv-d1">Stop renting your tempo.</h2>
+        <p class="sub rv rv-d2">Free to download. One $2.99 upgrade, ever. No account, no ads, no data leaving your phone.</p>
+        <a class="store-badge rv rv-d3" href="https://apps.apple.com/app/ghost-beat-timing-trainer/id6743352015" aria-label="Download Ghost Beat on the App Store">
+            <svg viewBox="0 0 200 60" role="img" aria-hidden="true">
+                <rect x="1" y="1" width="198" height="58" rx="12" fill="#000" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+                <g transform="translate(17 15) scale(1.3)" fill="#fff">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </g>
+                <text x="58" y="26" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11">Download on the</text>
+                <text x="58" y="45" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="600">App Store</text>
+            </svg>
+        </a>
+        <p class="fine">VERSION 2.0 · IOS</p>
+    </section>
+
     </main>
 
     <footer>
+        <div class="foot-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="mailto:lance.pederson@gmail.com">Support</a>
+            <a href="https://apps.apple.com/app/ghost-beat-timing-trainer/id6743352015">App Store</a>
+        </div>
         <p>Ghost Beat © 2026 Will Pederson</p>
-        <p style="margin-top: 8px;">
-            <a href="privacy.html">Privacy Policy</a> · <a href="mailto:lance.pederson@gmail.com">Support</a>
-        </p>
+        <p class="privacy-line">NO ANALYTICS · NO ADS · EVERYTHING STAYS ON YOUR DEVICE</p>
     </footer>
 
+    <script>
+    (function () {
+        'use strict';
+        var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.documentElement.classList.add('js');
+
+        /* nav border on scroll */
+        var nav = document.getElementById('nav');
+        addEventListener('scroll', function () {
+            nav.classList.toggle('scrolled', scrollY > 10);
+        }, { passive: true });
+
+        /* ---------- hero sequencer: 1 bar audible, 1 bar ghost, 100 BPM ---------- */
+        var seq = document.getElementById('seq');
+        var seqLabel = document.getElementById('seqLabel');
+        var pads = seq.querySelectorAll('.pad');
+        if (!reduceMotion) {
+            var beat = -1, BEAT = 600;
+            var t0 = performance.now();
+            (function padLoop() {
+                beat++;
+                var i = beat % 4;
+                var silentBar = Math.floor(beat / 4) % 2 === 1;
+                seq.classList.toggle('silent', silentBar);
+                seqLabel.textContent = silentBar ? 'SILENT' : 'AUDIBLE';
+                pads.forEach(function (p) { p.classList.remove('hit'); });
+                pads[i].classList.add('hit');
+                var next = t0 + (beat + 1) * BEAT;
+                setTimeout(padLoop, Math.max(20, next - performance.now()));
+            })();
+        }
+
+        /* ---------- scroll reveals ---------- */
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
+
+        /* ---------- feature card cursor glow ---------- */
+        document.querySelectorAll('.feat').forEach(function (card) {
+            card.addEventListener('pointermove', function (e) {
+                var r = card.getBoundingClientRect();
+                card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+                card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+            });
+        });
+
+        /* ---------- sticky showcase image swap ---------- */
+        var frameImgs = document.querySelectorAll('#phoneFrame img');
+        var steps = document.querySelectorAll('.show-step');
+        if (steps.length && frameImgs.length) {
+            var stepIO = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (!e.isIntersecting) return;
+                    var idx = e.target.getAttribute('data-shot');
+                    steps.forEach(function (s) { s.classList.toggle('active', s === e.target); });
+                    frameImgs.forEach(function (img) {
+                        img.classList.toggle('on', img.getAttribute('data-shot') === idx);
+                    });
+                });
+            }, { threshold: 0.55 });
+            steps.forEach(function (s) { stepIO.observe(s); });
+        }
+
+        /* ---------- ghost bar tap test ---------- */
+        var BPM = 100, INTERVAL = 60000 / BPM;
+        var startBtn = document.getElementById('demoStart');
+        var tapZone = document.getElementById('tapZone');
+        var statusEl = document.getElementById('demoStatus');
+        var beats = document.getElementById('demoBeats').children;
+        var resultEl = document.getElementById('demoResult');
+        var gradeRing = document.getElementById('gradeRing');
+        var gradeVerdict = document.getElementById('gradeVerdict');
+        var gradeDetail = document.getElementById('gradeDetail');
+        var appLink = document.getElementById('demoAppLink');
+
+        var audioCtx = null, running = false, expected = [], taps = [];
+
+        function click(when, accent) {
+            var osc = audioCtx.createOscillator();
+            var gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.value = accent ? 1500 : 1000;
+            gain.gain.setValueAtTime(0.25, when);
+            gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.06);
+            osc.connect(gain).connect(audioCtx.destination);
+            osc.start(when);
+            osc.stop(when + 0.08);
+        }
+
+        function resetBeats() {
+            for (var i = 0; i < 8; i++) {
+                beats[i].className = 'db ' + (i < 4 ? 'click' : 'ghosted');
+                beats[i].textContent = (i % 4) + 1;
+            }
+        }
+
+        function setStatus(text, cls) {
+            statusEl.textContent = text;
+            statusEl.className = 'demo-status' + (cls ? ' ' + cls : '');
+        }
+
+        function startTest() {
+            if (running) return;
+            running = true;
+            taps = [];
+            resultEl.classList.remove('show');
+            resetBeats();
+            startBtn.textContent = 'Listen…';
+            tapZone.classList.remove('armed');
+
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            audioCtx.resume().then(schedule, schedule);
+        }
+
+        function schedule() {
+            /* map AudioContext clock -> performance.now() clock */
+            var perfNow = performance.now();
+            var startAt = audioCtx.currentTime + 0.35;
+            var offset = perfNow - audioCtx.currentTime * 1000;
+            expected = [];
+
+            for (var i = 0; i < 8; i++) {
+                var tCtx = startAt + (i * INTERVAL) / 1000;
+                if (i < 4) click(tCtx, i === 0);
+                expected.push(tCtx * 1000 + offset);
+                (function (i) {
+                    setTimeout(function () {
+                        if (!running) return;
+                        if (i < 4) {
+                            beats[i].classList.add('flash');
+                            setTimeout(function () { beats[i].classList.remove('flash'); }, 140);
+                            setStatus(i === 0 ? 'LISTEN — BAR 1 IS AUDIBLE' : 'LISTEN…', 'listen');
+                        } else if (i === 4) {
+                            setStatus('GHOST BAR — TAP EVERY BEAT', 'ghost');
+                            tapZone.classList.add('armed');
+                            tapZone.firstChild.textContent = 'TAP THE BEAT';
+                        }
+                    }, expected[i] - performance.now());
+                })(i);
+            }
+
+            /* finish shortly after the last silent beat's grace window */
+            setTimeout(finish, expected[7] - performance.now() + INTERVAL * 0.6);
+        }
+
+        function registerTap() {
+            if (!running) return;
+            var now = performance.now();
+            /* only count taps aimed at the silent bar (beats 4-7) */
+            if (now < expected[4] - INTERVAL / 2) return;
+            taps.push(now);
+        }
+
+        function finish() {
+            running = false;
+            tapZone.classList.remove('armed');
+            tapZone.firstChild.textContent = 'Press start, listen to one bar, then tap the silent beats ';
+            startBtn.textContent = 'Run it again';
+            appLink.style.display = 'inline-block';
+
+            /* match each silent beat to the nearest unused tap */
+            var devs = [], used = [];
+            for (var b = 4; b < 8; b++) {
+                var best = -1, bestAbs = Infinity;
+                for (var t = 0; t < taps.length; t++) {
+                    if (used.indexOf(t) !== -1) continue;
+                    var d = taps[t] - expected[b];
+                    if (Math.abs(d) < bestAbs && Math.abs(d) <= INTERVAL / 2) { bestAbs = Math.abs(d); best = t; }
+                }
+                var el = beats[b];
+                if (best === -1) {
+                    devs.push(null);
+                    el.className = 'db miss'; el.textContent = '✕';
+                } else {
+                    used.push(best);
+                    var dev = Math.round(taps[best] - expected[b]);
+                    devs.push(dev);
+                    var a = Math.abs(dev);
+                    el.className = 'db ' + (a <= 35 ? 'good' : a <= 80 ? 'ok' : 'bad');
+                    el.textContent = (dev > 0 ? '+' : '') + dev;
+                }
+            }
+
+            var hits = devs.filter(function (d) { return d !== null; });
+            var misses = 4 - hits.length;
+            var grade, verdict;
+            if (!hits.length) {
+                grade = '—'; verdict = 'No taps registered. Try again?';
+                gradeDetail.textContent = 'Tap the big pad (or spacebar) on each silent beat.';
+            } else {
+                var avg = Math.round(hits.reduce(function (s, d) { return s + Math.abs(d); }, 0) / hits.length);
+                if (misses >= 2) { grade = 'D'; }
+                else if (avg <= 20 && !misses) grade = 'S';
+                else if (avg <= 40 && !misses) grade = 'A';
+                else if (avg <= 70) grade = 'B';
+                else if (avg <= 100) grade = 'C';
+                else grade = 'D';
+                verdict = { S: 'Machine-level timing.', A: 'Locked in.', B: 'Solid. The app will tighten it.', C: 'You drifted when the click left.', D: 'The click was carrying you.' }[grade];
+                gradeDetail.textContent = 'avg deviation ' + avg + ' ms · ' + hits.length + '/4 beats hit' + (misses ? ' · ' + misses + ' missed' : '');
+            }
+            var colors = { S: 'var(--cyan)', A: 'var(--lime)', B: 'var(--gold)', C: 'var(--orange)', D: 'var(--red)', '—': 'var(--muted)' };
+            gradeRing.textContent = grade;
+            gradeRing.style.borderColor = colors[grade];
+            gradeRing.style.color = colors[grade];
+            gradeVerdict.textContent = verdict;
+            resultEl.classList.add('show');
+            setStatus('100 BPM · 4/4 · SOUND ON');
+        }
+
+        startBtn.addEventListener('click', startTest);
+        tapZone.addEventListener('pointerdown', function (e) { e.preventDefault(); registerTap(); });
+        addEventListener('keydown', function (e) {
+            if (e.code !== 'Space') return;
+            if (running) { e.preventDefault(); registerTap(); }
+        });
+    })();
+    </script>
 </body>
 </html>
