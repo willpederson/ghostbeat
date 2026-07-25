@@ -228,7 +228,8 @@
             font-family: var(--mono); font-size: 12px; letter-spacing: 1px;
             color: var(--dim);
         }
-        .trust-row .stars { color: var(--gold); }
+        .trust-row .stars { color: var(--gold); display: inline-flex; align-items: center; gap: 5px; }
+        .trust-row .stars .star { font-size: 17px; line-height: 1; }
         .trust-row .stars b { color: var(--text); }
         .trust-dot { color: var(--muted); }
 
@@ -588,7 +589,7 @@
             </svg>
         </a>
         <div class="trust-row" aria-label="App Store rating and trust facts">
-            <span class="trust-item stars">★★★★★ <b>5.0</b> on the App Store</span>
+            <span class="trust-item stars"><span class="star">★</span> <b>5.0</b> on the App Store</span>
             <span class="trust-dot">·</span>
             <span class="trust-item">NO ADS</span>
             <span class="trust-dot">·</span>
