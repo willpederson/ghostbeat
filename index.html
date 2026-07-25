@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ghost Beat — The Metronome That Disappears</title>
-    <meta name="description" content="Ghost Beat is the metronome that trains your internal clock. Ghost bars cycle between audible and silent, forcing you to keep time on your own. iPhone & iPad.">
-    <meta name="keywords" content="metronome app, timing trainer, ghost beat, drum practice, internal timing, iOS metronome, ghost bars, rhythm training, tap accuracy, practice tracker">
+    <meta name="description" content="Ghost Beat is a timing trainer and rhythm practice app for drummers and musicians. Ghost bars cycle between audible and silent so you build a rock-solid internal clock. Free on iPhone & iPad — no ads, no subscription.">
+    <meta name="keywords" content="metronome app, timing trainer, drummer timing trainer, rhythm practice app, practice with metronome, improve rhythm, metronome trainer, ghost beat, drum practice, internal timing, iOS metronome, ghost bars, tap accuracy, practice tracker">
     <meta name="author" content="Will Pederson">
     <meta name="robots" content="index, follow">
     <meta name="google-site-verification" content="XDkvOHvKttFbGnutUKVoniFn0wK7_AF5vGTXlmziCcc">
@@ -35,6 +35,7 @@
         "operatingSystem": "iOS",
         "description": "Ghost Beat is a timing trainer that cycles between audible and silent bars, training your internal clock. Features ghost bars, tap accuracy grading, practice routines, daily challenges, and detailed stats.",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5.0", "ratingCount": "5" },
         "author": { "@type": "Person", "name": "Will Pederson" },
         "softwareVersion": "2.0",
         "datePublished": "2026-03"
@@ -219,11 +220,38 @@
         .store-badge:hover { transform: scale(1.045); filter: drop-shadow(0 6px 28px rgba(255, 255, 255, 0.18)); }
         .store-badge svg { display: block; height: 56px; width: auto; }
 
+        .trust-row {
+            position: relative; z-index: 1;
+            display: flex; align-items: center; justify-content: center;
+            flex-wrap: wrap; gap: 8px 10px;
+            margin-top: 22px;
+            font-family: var(--mono); font-size: 12px; letter-spacing: 1px;
+            color: var(--dim);
+        }
+        .trust-row .stars { color: var(--gold); }
+        .trust-row .stars b { color: var(--text); }
+        .trust-dot { color: var(--muted); }
+
         .hero .fine {
             position: relative; z-index: 1;
-            margin-top: 18px; font-size: 13px; color: var(--muted);
+            margin-top: 12px; font-size: 13px; color: var(--muted);
             font-family: var(--mono); letter-spacing: 0.5px;
         }
+
+        /* ---------- audience ---------- */
+        .who-sec { padding: 0 24px 110px; text-align: center; }
+        .who-chips {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 10px; margin-top: 32px; max-width: 720px;
+            margin-left: auto; margin-right: auto;
+        }
+        .who-chip {
+            font-size: 14px; font-weight: 600; color: var(--text);
+            border: 1px solid var(--line);
+            background: var(--surface);
+            padding: 10px 18px; border-radius: 100px;
+        }
+        .who-chip::before { content: '✓ '; color: var(--lime); font-weight: 700; }
 
         .scroll-cue {
             position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
@@ -547,7 +575,7 @@
             <span class="l1">The click</span>
             <span class="l2">disappears.</span>
         </h1>
-        <p class="tagline">Any metronome keeps time <strong>for</strong> you. Ghost Beat cycles between audible and silent bars — so when the click drops out, <strong>your</strong> internal clock has to carry the beat.</p>
+        <p class="tagline">Every drummer drifts when the click disappears. Ghost Beat cycles between audible and silent bars — training <strong>your</strong> internal clock to carry the beat — so you don't.</p>
 
         <a class="store-badge" href="https://apps.apple.com/us/app/ghost-beat-timing-trainer/id6760374042" aria-label="Download Ghost Beat on the App Store">
             <svg viewBox="0 0 200 60" role="img" aria-hidden="true">
@@ -559,7 +587,16 @@
                 <text x="58" y="45" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="600">App Store</text>
             </svg>
         </a>
-        <p class="fine">FREE · PRO $4.99 · IPHONE &amp; IPAD</p>
+        <div class="trust-row" aria-label="App Store rating and trust facts">
+            <span class="trust-item stars">★★★★★ <b>5.0</b> on the App Store</span>
+            <span class="trust-dot">·</span>
+            <span class="trust-item">NO ADS</span>
+            <span class="trust-dot">·</span>
+            <span class="trust-item">NO ACCOUNT</span>
+            <span class="trust-dot">·</span>
+            <span class="trust-item">NO SUBSCRIPTION</span>
+        </div>
+        <p class="fine">FREE · PRO IS A ONE-TIME $4.99 · IPHONE &amp; IPAD</p>
 
         <div class="scroll-cue" aria-hidden="true"></div>
     </section>
@@ -683,15 +720,30 @@
                 <h2>Everything serves one goal:<br>time you can trust.</h2>
             </div>
             <div class="feat-grid">
-                <div class="feat rv"><div class="glyph">👻</div><h3>Ghost Bars</h3><p>Set how many bars play and how many go silent. 2 on, 2 off. 1 on, 3 off. When the click vanishes, your real timing shows up.</p></div>
-                <div class="feat rv rv-d1"><div class="glyph">🎲</div><h3>Random Mute</h3><p>Individual beats disappear unpredictably. You never know which one is next. Pure internal time training.</p></div>
-                <div class="feat rv rv-d2"><div class="glyph">🎯</div><h3>Tap Accuracy</h3><p>Tap along with the beat and get graded S through D. Calibrates to your touch latency, then measures real timing deviation.</p></div>
-                <div class="feat rv rv-d3"><div class="glyph">📋</div><h3>Practice Routines</h3><p>Chain exercises into timed sessions. Set BPM, on/off bars, and time signature per step. Hit play and the routine runs itself.</p></div>
-                <div class="feat rv"><div class="glyph">🏆</div><h3>Daily Challenges</h3><p>A new timing challenge every day — survive ghost bars, hit accuracy targets, or hold tempo for a set time. Stay sharp.</p></div>
-                <div class="feat rv rv-d1"><div class="glyph">📊</div><h3>Practice Stats</h3><p>Streaks, session history, timing grades, and weekly charts. Progress measured in timing-specific terms, not just minutes.</p></div>
-                <div class="feat rv rv-d2"><div class="glyph">📉</div><h3>Progressive Difficulty<span class="pro-tag">PRO</span></h3><p>Beats gradually fade out over bars until you're playing in complete silence. The ultimate test of internal pulse.</p></div>
-                <div class="feat rv rv-d3"><div class="glyph">🎛️</div><h3>Deep Customization</h3><p>6 time signatures, 7 subdivisions (down to 1/32T), 4 click sounds, accent patterns, pitch control, count-ins, and haptics.</p></div>
+                <div class="feat rv"><div class="glyph">👻</div><h3>Ghost Bars</h3><p>Never lose the beat when the click drops out. Choose how many bars play and how many go silent — 2 on, 2 off. 1 on, 3 off. The silence is where your real timing shows up.</p></div>
+                <div class="feat rv rv-d1"><div class="glyph">🎲</div><h3>Random Mute</h3><p>Train for real performances, where timing isn't spoon-fed. Beats vanish unpredictably — you never know which one is next.</p></div>
+                <div class="feat rv rv-d2"><div class="glyph">🎯</div><h3>Tap Accuracy</h3><p>Find out how consistent your timing really is. Graded S through D, calibrated to your touch latency, measured in milliseconds.</p></div>
+                <div class="feat rv rv-d3"><div class="glyph">📋</div><h3>Practice Routines</h3><p>Practice that runs itself. Chain exercises with BPM, ghost pattern, and time signature per step — press play once.</p></div>
+                <div class="feat rv"><div class="glyph">🏆</div><h3>Daily Challenges</h3><p>Stay sharp with a new timing challenge every day — survive ghost bars, hit accuracy targets, or hold tempo for a set time.</p></div>
+                <div class="feat rv rv-d1"><div class="glyph">📊</div><h3>Practice Stats</h3><p>Watch yourself get better. Streaks, session history, timing grades, and weekly charts — progress in timing terms, not just minutes.</p></div>
+                <div class="feat rv rv-d2"><div class="glyph">📉</div><h3>Progressive Difficulty<span class="pro-tag">PRO</span></h3><p>Work up to playing in total silence. Beats fade out over bars until the safety net is completely gone.</p></div>
+                <div class="feat rv rv-d3"><div class="glyph">🎛️</div><h3>Deep Customization</h3><p>Make it fit your practice: 6 time signatures, 7 subdivisions (down to 1/32T), 4 click sounds, accents, pitch, count-ins, haptics.</p></div>
             </div>
+        </div>
+    </section>
+
+    <!-- ============ AUDIENCE ============ -->
+    <section class="who-sec">
+        <div class="rv">
+            <div class="eyebrow">Who it's for</div>
+            <h2>Built for anyone who can't<br>afford to drift.</h2>
+        </div>
+        <div class="who-chips rv rv-d1">
+            <span class="who-chip">Drumline &amp; marching</span>
+            <span class="who-chip">Church &amp; worship drummers</span>
+            <span class="who-chip">Studio &amp; session players</span>
+            <span class="who-chip">Beginners building fundamentals</span>
+            <span class="who-chip">Anyone who leans on the click</span>
         </div>
     </section>
 
@@ -708,7 +760,7 @@
                 <span class="tick-item">NO ACCOUNTS</span><span class="tick-dot">◆</span>
                 <span class="tick-item">NO TRACKING</span><span class="tick-dot">◆</span>
                 <span class="tick-item">IPHONE &amp; IPAD</span><span class="tick-dot">◆</span>
-                <span class="tick-item">FREE · PRO <b>$4.99</b></span><span class="tick-dot">◆</span>
+                <span class="tick-item">FREE · PRO <b>$4.99</b> ONE-TIME</span><span class="tick-dot">◆</span>
             </div>
             <div class="tick-group">
                 <span class="tick-item"><b>20–300</b> BPM</span><span class="tick-dot">◆</span>
@@ -720,7 +772,7 @@
                 <span class="tick-item">NO ACCOUNTS</span><span class="tick-dot">◆</span>
                 <span class="tick-item">NO TRACKING</span><span class="tick-dot">◆</span>
                 <span class="tick-item">IPHONE &amp; IPAD</span><span class="tick-dot">◆</span>
-                <span class="tick-item">FREE · PRO <b>$4.99</b></span><span class="tick-dot">◆</span>
+                <span class="tick-item">FREE · PRO <b>$4.99</b> ONE-TIME</span><span class="tick-dot">◆</span>
             </div>
         </div>
     </section>
@@ -730,7 +782,7 @@
         <div class="rings" aria-hidden="true"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
         <img src="icon.png" alt="Ghost Beat app icon" class="cta-icon rv" width="108" height="108">
         <h2 class="rv rv-d1">Stop renting your tempo.</h2>
-        <p class="sub rv rv-d2">Free to download. One $4.99 upgrade, ever. No account, no ads, no data leaving your phone.</p>
+        <p class="sub rv rv-d2">Free to download. Pro is a one-time $4.99 — no subscription, ever. No account, no ads, no data leaving your phone.</p>
         <a class="store-badge rv rv-d3" href="https://apps.apple.com/us/app/ghost-beat-timing-trainer/id6760374042" aria-label="Download Ghost Beat on the App Store">
             <svg viewBox="0 0 200 60" role="img" aria-hidden="true">
                 <rect x="1" y="1" width="198" height="58" rx="12" fill="#000" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
