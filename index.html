@@ -9,21 +9,21 @@
     <meta name="author" content="Will Pederson">
     <meta name="robots" content="index, follow">
     <meta name="google-site-verification" content="XDkvOHvKttFbGnutUKVoniFn0wK7_AF5vGTXlmziCcc">
-    <link rel="canonical" href="https://willpederson.github.io/ghostbeat/">
+    <link rel="canonical" href="https://ghostbeat.cc/">
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
 
     <meta property="og:title" content="Ghost Beat — The Metronome That Disappears">
     <meta property="og:description" content="Ghost bars force you to keep time without the click. Train your internal clock on iPhone & iPad.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://willpederson.github.io/ghostbeat/">
-    <meta property="og:image" content="https://willpederson.github.io/ghostbeat/icon.png">
+    <meta property="og:url" content="https://ghostbeat.cc/">
+    <meta property="og:image" content="https://ghostbeat.cc/icon.png">
     <meta property="og:image:alt" content="Ghost Beat app icon">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Ghost Beat — The Metronome That Disappears">
     <meta name="twitter:description" content="Ghost bars force you to keep time without the click. Train your internal clock on iPhone & iPad.">
-    <meta name="twitter:image" content="https://willpederson.github.io/ghostbeat/icon.png">
+    <meta name="twitter:image" content="https://ghostbeat.cc/icon.png">
     <meta name="theme-color" content="#0a0a0a">
 
     <script type="application/ld+json">
@@ -773,10 +773,13 @@
         var seqLabel = document.getElementById('seqLabel');
         var pads = seq.querySelectorAll('.pad');
         if (!reduceMotion) {
-            var beat = -1, BEAT = 600;
+            var BEAT = 600;
             var t0 = performance.now();
             (function padLoop() {
-                beat++;
+                /* derive the beat from wall-clock time: after browser timer
+                   throttling (background tab), this snaps straight to the
+                   current beat instead of fast-forwarding through missed ones */
+                var beat = Math.floor((performance.now() - t0) / BEAT);
                 var i = beat % 4;
                 var silentBar = Math.floor(beat / 4) % 2 === 1;
                 seq.classList.toggle('silent', silentBar);
