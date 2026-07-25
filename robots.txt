@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://willpederson.github.io/ghostbeat/sitemap.xml
+Sitemap: https://ghostbeat.cc/sitemap.xml
